@@ -3,3 +3,5 @@ highway-env
 matplotlib
 gymnasium
 gym-minigrid
+torch
+stable-baselines3[extra]
