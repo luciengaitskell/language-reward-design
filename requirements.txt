@@ -2,6 +2,8 @@ minigrid==2.3.1
 highway-env
 matplotlib
 gymnasium
-gym-minigrid
+git+https://github.com/Farama-Foundation/Minigrid.git@gym-minigrid-legacy
 torch
 stable-baselines3[extra]
+scikit-learn
+git+https://github.com/idanshen/easyrl.git@sac
