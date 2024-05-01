@@ -31,6 +31,7 @@ def train_ppo(env_name: str, max_steps: int = 200000) -> str:
     cfg.alg.deque_size = 20
     cfg.alg.device = 'cuda' if torch.cuda.is_available() else 'cpu'
     cfg.alg.env_name = env_name
+    cfg.alg.seed = 0
     cfg.alg.save_dir = Path.cwd().absolute().joinpath('data').as_posix()
     cfg.alg.save_dir += '/'
    
@@ -41,10 +42,11 @@ def train_ppo(env_name: str, max_steps: int = 200000) -> str:
     print(f'      Total number of steps:{cfg.alg.max_steps}')
     print(f'====================================')
 
-    # set_random_seed(cfg.alg.seed)
+    set_random_seed(cfg.alg.seed)
     env = make_vec_env(cfg.alg.env_name,
-                       cfg.alg.num_envs)
-    env.reset()
+                       cfg.alg.num_envs,
+                       seed=cfg.alg.seed)
+    env.reset(seed=cfg.alg.seed)
     ob_size = env.observation_space.shape[0]
 
     actor_body = MLP(input_size=ob_size,
