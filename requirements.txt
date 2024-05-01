@@ -7,4 +7,4 @@ torch
 stable-baselines3==2.3.2
 scikit-learn
 git+https://github.com/idanshen/easyrl.git@sac
-moviepy
+moviepy==1.0.3
