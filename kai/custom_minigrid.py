@@ -30,3 +30,4 @@ register(
 )
 
 ### to make work with VLM, we will have to customize our reward as something based on colors, etc.
+### eg VLM1 -> color purple is best, higher reward in that direction, VLM2 -> translate that into code; distance from purple coordinate in observation, distance from key, distance from door
