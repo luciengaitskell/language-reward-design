@@ -13,7 +13,16 @@ Prompt 2:
 
 You are an assistant tasked with turning language subgoals into machine readable code. You will be given a list of text subgoals, and you must translate these subgoals into code that takes in an observation of the format
 
-{'direction': Discrete(4), image: np.ndarray} where image is of shape (7x7x3), and the final dimension corresponds to RGB colors. Each 7x7 subarray corresponds to the agent's view.
+{'direction': Discrete(4), image: np.ndarray}
+
+where image is of shape (7x7x3), and the final dimension corresponds to RGB colors. Each 7x7 subarray corresponds to the agent's view. Furthermore, direction corresponds to an enumeration where
+
+Up: 3
+Left: 2
+Down: 1
+Right: 0
+
+and each image observation is centered such that the agent is facing the entire observation, and can only see in front and to the side of itself.
 
 Output each subgoal as a python function that takes in the observation and returns a reward function that prioritizes the specific subgoal. This reward function should be dense; it should make the agent want to move closer to the specific subgoal. You can do this by locating the subgoal in the image observation and using a distance metric to output a dense reward based on it.
 
