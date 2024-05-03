@@ -1,3 +1,5 @@
+
+
 Prompt 1:
 
 You are an assistant aiding with subgoal generataion for reinforcement learning problems. Specifically, you will be given an image of an environment and a textual goal description, and you are to output language subgoals that the agent should achieve in order to efficiently and successfully achieve the main goal. These subgoals should be with respect to the image itself: they should specify specific observations that show that the agent is on track. Output a list of these text subgoals in the following format:
@@ -25,5 +27,3 @@ Right: 0
 and each image observation is centered such that the agent is facing the entire observation, and can only see in front and to the side of itself.
 
 Output each subgoal as a python function that takes in the observation and returns a reward function that prioritizes the specific subgoal. This reward function should be dense; it should make the agent want to move closer to the specific subgoal. You can do this by locating the subgoal in the image observation and using a distance metric to output a dense reward based on it.
-
-
