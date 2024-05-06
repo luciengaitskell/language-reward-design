@@ -163,3 +163,5 @@ cython_debug/
 
 # 6.8200 Project data
 data/
+
+**/.env

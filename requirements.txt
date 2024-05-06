@@ -10,3 +10,4 @@ git+https://github.com/idanshen/easyrl.git@sac
 moviepy==1.0.3
 openai
 typing
+pydantic-settings

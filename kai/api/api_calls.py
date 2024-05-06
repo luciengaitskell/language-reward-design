@@ -1,30 +1,61 @@
-import os
 from openai import OpenAI
-import openai
+from .settings import Settings
 
-def openai_repr(system_instructions, prompt):
-    '''
-    Query the OpenAI API to get the response to the prompt. Prompt something like
-    '''
+openai_client = OpenAI(api_key=Settings().openai_key)
 
-    # Set the OpenAI API key -- REPLACE THIS WITH YOUR OWN
-    
 
-    # Define the GPT model
-    gpt_model = 'gpt-3.5-turbo'
-    
+def vision(prompt_text: str, img_base64: str):
+    """Run a GPT-4 vision model on the prompt text and image.
+
+    ```
+    from PIL import Image
+    im = Image.fromarray(r)
+    vision("what do you see?", image_to_base64(im))
+    ```
+    """
+    gpt_model = "gpt-4-turbo"
+
     messages = [
-        {"role": "system", "content": system_instructions},
-        {"role": "user", "content": prompt}
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt_text},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{img_base64}",
+                    },
+                },
+            ],
+        }
     ]
 
-    client = OpenAI() # pass api_key
-   
-    # Generate response using Chat Completion API
-    response = client.chat.completions.create(
+    response = openai_client.chat.completions.create(
         model=gpt_model,
         messages=messages,
-        temperature=0.2
+        temperature=0.2,
+        max_tokens=300,
     )
+    return response
 
+
+def complete(prompt_text: str):
+    """Run a GPT-4 model on the prompt text."""
+    gpt_model = "gpt-4-turbo"
+
+    messages = [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt_text},
+            ],
+        }
+    ]
+
+    response = openai_client.chat.completions.create(
+        model=gpt_model,
+        messages=messages,
+        temperature=0.2,
+        max_tokens=300,
+    )
     return response
