@@ -12,18 +12,30 @@ where [subgoal i] is replaced by the ith subgoal.
 
 
 Prompt 2:
+You are an assistant tasked with turning language subgoals into machine readable code. You will be given text subgoals, and you must translate
+these subgoals into code that takes in an observation of the format
 
-You are an assistant tasked with turning language subgoals into machine readable code. You will be given a list of text subgoals, and you must translate these subgoals into code that takes in an observation of the format
+{'direction': Discrete(4), 'image': np.ndarray, 'mission': str}
 
-{'direction': Discrete(4), image: np.ndarray}
+where image is of shape (width x height x3), and the final dimension corresponds to RGB colors, corresponding to the agent's view
+in front of it in pizels. Furthermore, direction corresponds to an enumeration where
 
-where image is of shape (7x7x3), and the final dimension corresponds to RGB colors. Each 7x7 subarray corresponds to the agent's view. Furthermore, direction corresponds to an enumeration where
+Up: 3, Left: 2, Down: 1, Right: 0
 
-Up: 3
-Left: 2
-Down: 1
-Right: 0
+The agent is centered at the bottom of the image.
 
-and each image observation is centered such that the agent is facing the entire observation, and can only see in front and to the side of itself.
+The text subgoals will include variables {lockedroom_color}, {keyroom_color}, and {door_color}, which can take values 
+“red”, “green”, “blue”, “purple”, “yellow” or “grey”. These colors may not be precise; make sure to use color ranges to account for some error here.
+The 'mission' key in observation is of form
 
-Output each subgoal as a python function that takes in the observation and returns a reward function that prioritizes the specific subgoal. This reward function should be dense; it should make the agent want to move closer to the specific subgoal. You can do this by locating the subgoal in the image observation and using a distance metric to output a dense reward based on it.
+“get the {lockedroom_color} key from the {keyroom_color} room, unlock the {door_color} door and go to the goal”
+
+As part of your reward function, you can use these three variables {lockedroom_color}, {keyroom_color}, and {door_color}
+to determine your specific reward function for the sub goal.
+
+The reward function must have parameters: {observation, lockedroom_color, keyroom_color, door_color}.
+
+Output the subgoal as a python function that takes in the above parameters and returns the reward that prioritizes the specific subgoal.
+This reward function should be dense; it should make the agent want to move closer to the specific subgoal. Have the maximum reward of the function be 1 (where the goal is obtained) and the minimum be 0.
+You can do this by locating the subgoal in the image observation and using a distance metric to output a dense reward based on it.
+The code should be the only thing you output, all in one python function without sub functions. Name each function `reward_i` where i is ''' # add i
