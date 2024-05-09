@@ -19,6 +19,13 @@ class CustomParkingEnv(ParkingEnv):
     def compute_reward(self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info: dict, p: float = 0.5) -> float:
         return self.compute_reward_func(self, achieved_goal, desired_goal, info, p)
 
+    def _reward(self, action: np.ndarray) -> float:
+        obs = self.observation_type_parking.observe()
+        # print(f"inside _reward, obs is : {obs}")
+        obs = obs if isinstance(obs, tuple) else (obs,)
+        reward = sum(self.compute_reward(agent_obs['achieved_goal'], agent_obs['desired_goal'], {}) for agent_obs in obs)
+        reward += self.config['collision_reward'] * sum(v.crashed for v in self.controlled_vehicles)
+        return reward
 
 register(
     id="CustomParking-v0",
