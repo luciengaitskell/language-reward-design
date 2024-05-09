@@ -1,5 +1,5 @@
 # custom_parking_env.py
-from typing import Callable
+from typing import Callable, List
 
 from gymnasium.envs.registration import register
 from minigrid.envs.lockedroom import LockedRoomEnv
@@ -15,16 +15,20 @@ class CustomMinigridEnv(LockedRoomEnv):
         *args,
         compute_reward: Callable[["CustomMinigridEnv", spaces.Dict], float],
         **kwargs
-    ):
+    ):  
         self.compute_reward_func = compute_reward
         super().__init__(*args, **kwargs)
         
-    def compute_reward(self, current_state: spaces.Dict) -> float:
-        return self.compute_reward_func(self, current_state)
-
+        
+    def _reward(self, current_state: spaces.Dict) -> float:
+        return None#self.compute_reward_func[0](self, current_state)
+    
+    def get_reward(self, obs):
+        return self._reward(obs)
 
 
 register( id="CustomLockedRoom-v0", entry_point=CustomMinigridEnv)
+# register( id="CustomLockedRoom-v0", entry_point=CustomMinigridEnv)
     # entry_point='highway_env.envs:ParkingEnv')
 
 ### to make work with VLM, we will have to customize our reward as something based on colors, etc.
