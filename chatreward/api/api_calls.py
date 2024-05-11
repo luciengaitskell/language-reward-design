@@ -1,7 +1,8 @@
 from openai import OpenAI
-from settings import Settings
+from .settings import Settings
 
 openai_client = OpenAI(api_key=Settings().openai_key)
+
 
 def vision(prompt_text: str, img_base64: str):
     """Run a GPT-4 vision model on the prompt text and image.
@@ -55,6 +56,6 @@ def complete(prompt_text: str):
         model=gpt_model,
         messages=messages,
         temperature=0.2,
-        max_tokens=300,
+        max_tokens=4096,
     )
     return response
