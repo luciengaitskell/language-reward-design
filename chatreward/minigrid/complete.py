@@ -40,11 +40,11 @@ def build_reward_funcs(subgoal_completion, suffixes: list[str]) -> RewardFuncsDi
                 reward_functions[i] = {}
 
             print(f"New reward function: {i}{suff}")
+            print(c)
             if "inf')" in c:
                 print("Skipping due to infinite value")
                 continue
 
-            print(c)
             loc_space = {}
             exec(c, globals(), loc_space)
             reward_functions[i][suff] = loc_space["reward"]
