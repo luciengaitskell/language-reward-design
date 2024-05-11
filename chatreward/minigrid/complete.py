@@ -2,6 +2,7 @@ from typing import Callable
 
 from PIL import Image
 from tqdm import tqdm
+import numpy as np  # this is required for the generated reward functions to use
 
 from .prompts import prompt1, prompt2
 from ..api import complete, vision, image_to_base64
@@ -41,11 +42,12 @@ def build_reward_funcs(subgoal_completion, suffixes: list[str]) -> RewardFuncsDi
 
             print(f"New reward function: {i}{suff}")
             print(c)
-            if "inf')" in c:
+            if False and "inf')" in c:
                 print("Skipping due to infinite value")
                 continue
 
             loc_space = {}
+
             exec(c, globals(), loc_space)
             reward_functions[i][suff] = loc_space["reward"]
 

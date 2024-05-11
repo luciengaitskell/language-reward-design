@@ -6,6 +6,10 @@ The goal description is:
 
 “get the {lockedroom_color} key from the {keyroom_color} room, unlock the {door_color} door and go to the goal”
 
+Note that all doors must be toggled before the agent can go through them,
+therefore, a helpful subgoal is to get the agent agent in front of the relevant door before going inside in a subsequent subgoal.
+You should add subgoals that specify toggling the door, which opens it and unlocks locked doors if holding the key.
+
 where you can use {lockedroom_color}, {keyroom_color}, and {door_color} as variables in the subgoals and the goal is a light green square.
 The variables can be the values “red”, “green”, “blue”, “purple”, “yellow” or “grey”.
 
@@ -18,8 +22,14 @@ Output a list of ONLY these text subgoals in the following format (without any i
 - ...
 
 where [subgoal i] is replaced by the ith subgoal. subgoals Do not create directional subgoals but rather strategic
-subgoals that do not hard code the direction but instead tell the agent which states are more beneficial. The subgoals should be able to be completed
-by the agent moving, picking up a key, or using a key.
+subgoals that do not hard code the direction but instead tell the agent which states are more beneficial.
+The subgoals should be a simple single action and should be achieved by a specific agent action,
+such as being adjacent to a specific door, opening a door, picking up a key, or using a key.
+Each subgoal should only be concerned with the single action and does not need to be concerned with other states of the agent.
+For example:
+- Be in front of the {keyroom_color} door.
+- Open the {keyroom_color} door.
+- Pick up the {lockedroom_color} key.
 
 You should enough subgoals to be descriptive but not redundant. Use the included example image to be specific.
 
@@ -39,7 +49,10 @@ these subgoals into code that takes in an observation of the format
     1: Down
     0: Right
 
-'image' is of shape (width x height x 3), and the final dimension corresponds to a 3D tuple of (OBJECT_IDX, COLOR_IDX, STATE). Here, 
+This is the direction of the observation relative to the global space, however, this likely is not necessary for the reward function.
+
+'image' is of shape (width x height x 3), therefore the first dimension is the x coordinate and the second dimension is the y coordinate.
+The final dimension corresponds to a 3D tuple of (OBJECT_IDX, COLOR_IDX, STATE). Here, 
 
 OBJECT_IDX is a number with the corresponding object type: 
     0: "unseen"
@@ -62,7 +75,8 @@ STATE is a number with the corresponding state if the object is a door:
     1: "closed"
     2: "locked"
 
-The agent is centered at the bottom of the image.
+The agent is centered at the bottom of the image (half way across x and at maximum y).
+Therefore, the space right in front of the agent is ALWAYS the position of the agent with y - 1.
 
 'mission' is of the form “get the {lockedroom_color} key from the {keyroom_color} room, unlock the {door_color} door and go to the goal”
 
@@ -82,4 +96,5 @@ The only external library you can use is numpy, and if needed, the import must b
 This reward function should be dense; it should make the agent want to move closer to the specific subgoal. For example, you can use a distance function to achieve this for certain subgoals. You can also
 add reward components to ensure the prerequisites for the current subgoal are achieved if you think that would help.
 Have the maximum reward of the function be 1 (where the goal is obtained) and the minimum be 0. DO NOT use float('inf') or float('-inf') in your function.
+Note that the agent will at minimum be one step away from a door closed, because the agent must be adjacent to the door to toggle it open.
 The code should be the only thing you output, all in one python function without sub functions."""

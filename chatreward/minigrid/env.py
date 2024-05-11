@@ -176,15 +176,18 @@ def reward_gen_wrapper(reward_funcs: RewardFuncsDict):
 
 
 def create_env(
-    reward_funcs: RewardFuncsDict | None = None, farama_support: bool = True
+    reward_funcs: RewardFuncsDict | None = None,
+    rgb_support: bool = True,
+    farama_support: bool = True,
 ):
     env = gymnasium.make("MiniGrid-LockedRoom-v0", render_mode="rgb_array")
 
     if reward_funcs:
         env = CustomRewardWrapper(env, reward_gen_wrapper(reward_funcs))
-    env = RGBImgPartialObsWrapper(
-        env
-    )  # reward is calculated using regular obs, then plugged into model with img obs
+
+    if rgb_support:
+        env = RGBImgPartialObsWrapper(env)
+    # reward is calculated using regular obs, then plugged into model with img obs
 
     if farama_support:
         env = DictObservationSpaceWrapper(env)
