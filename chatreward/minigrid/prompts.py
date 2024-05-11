@@ -75,7 +75,8 @@ to determine your specific reward function for the subgoal. You can also use the
 
 The reward function must have the signature: reward(observation, action, lockedroom_color, keyroom_color, door_color). 
  
-Output the subgoal as a  python functions that takes in the above parameters and returns the reward that prioritizes the specific subgoal. The only external library you can use is numpy.
+Output the subgoal as a  python functions that takes in the above parameters and returns the reward that prioritizes the specific subgoal.
+The only external library you can use is numpy, and if needed, the import must be above the function definition. No imports should be inside the function.
 This reward function should be dense; it should make the agent want to move closer to the specific subgoal. For example, you can use a distance function to achieve this for certain subgoals. You can also
 add reward components to ensure the prerequisites for the current subgoal are achieved if you think that would help.
 Have the maximum reward of the function be 1 (where the goal is obtained) and the minimum be 0. DO NOT use float('inf') or float('-inf') in your function.
