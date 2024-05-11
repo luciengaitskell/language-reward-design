@@ -74,8 +74,10 @@ to determine your specific reward function for the subgoal. You can also use the
 0: turn left, 1: turn right, 2: move forward, 3: pick up an object, 4: DON'T USE, 5: toggle/activate an object, 6: DON'T USE
 
 The reward function must have the signature: reward(observation, action, lockedroom_color, keyroom_color, door_color). 
+
+Please also include a docstring at the top that succinctly explains what the reward function does.
  
-Output the subgoal as a  python functions that takes in the above parameters and returns the reward that prioritizes the specific subgoal.
+Output the subgoal as a python function that takes in the above parameters and returns the reward that prioritizes the specific subgoal.
 The only external library you can use is numpy, and if needed, the import must be above the function definition. No imports should be inside the function.
 This reward function should be dense; it should make the agent want to move closer to the specific subgoal. For example, you can use a distance function to achieve this for certain subgoals. You can also
 add reward components to ensure the prerequisites for the current subgoal are achieved if you think that would help.
