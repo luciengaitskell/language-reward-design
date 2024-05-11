@@ -17,6 +17,16 @@ import numpy as np
 from .complete import RewardFuncsDict
 
 
+COLOR_TO_IDX = {
+    "red": 0,
+    "green": 1,
+    "blue": 2,
+    "purple": 3,
+    "yellow": 4,
+    "grey": 5,
+}
+
+
 class Actions:
     LEFT = 0
     RIGHT = 1
@@ -120,15 +130,6 @@ def reward_gen_wrapper(reward_funcs: RewardFuncsDict):
             # print(obs)
             gamma = 0.0005  # probability to skip to next subgoal
 
-            COLOR_TO_IDX = {
-                "red": 0,
-                "green": 1,
-                "blue": 2,
-                "purple": 3,
-                "yellow": 4,
-                "grey": 5,
-            }
-
             # preprocess -- ideally this would be done with LLM if we had more compute
             lockedroom_color = COLOR_TO_IDX[obs["mission"].split(" ")[2]]
             keyroom_color = COLOR_TO_IDX[obs["mission"].split(" ")[6]]
@@ -174,7 +175,9 @@ def reward_gen_wrapper(reward_funcs: RewardFuncsDict):
     return generate_total_reward
 
 
-def create_env(reward_funcs: RewardFuncsDict | None = None):
+def create_env(
+    reward_funcs: RewardFuncsDict | None = None, farama_support: bool = True
+):
     env = gymnasium.make("MiniGrid-LockedRoom-v0", render_mode="rgb_array")
 
     if reward_funcs:
@@ -182,7 +185,9 @@ def create_env(reward_funcs: RewardFuncsDict | None = None):
     env = RGBImgPartialObsWrapper(
         env
     )  # reward is calculated using regular obs, then plugged into model with img obs
-    env = DictObservationSpaceWrapper(env)
-    env = MissionEncodingWrapper(env)
+
+    if farama_support:
+        env = DictObservationSpaceWrapper(env)
+        env = MissionEncodingWrapper(env)
 
     return env
