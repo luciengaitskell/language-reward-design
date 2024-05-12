@@ -3,10 +3,32 @@ from pathlib import Path
 
 from gymnasium.wrappers import RecordVideo
 from IPython import display as ipythondisplay
-# from pyvirtualdisplay import Display
+import copy
+import importlib
+import itertools
+from typing import Tuple, Dict, Callable, List, Optional, Union, Sequence
 
-# display = Display(visible=0, size=(1400, 900))
-# display.start()
+import numpy as np
+
+# Useful types
+Vector = Union[np.ndarray, Sequence[float]]
+Matrix = Union[np.ndarray, Sequence[Sequence[float]]]
+Interval = Union[np.ndarray,
+                 Tuple[Vector, Vector],
+                 Tuple[Matrix, Matrix],
+                 Tuple[float, float],
+                 List[Vector],
+                 List[Matrix],
+                 List[float]]
+
+
+def do_every(duration: float, timer: float) -> bool:
+    return duration < timer
+
+
+def lmap(v: float, x: Interval, y: Interval) -> float:
+    """Linear map of value v with range x to desired range y."""
+    return y[0] + (v - x[0]) * (y[1] - y[0]) / (x[1] - x[0])
 
 
 def record_videos(env, video_folder="videos"):
@@ -33,3 +55,4 @@ def show_videos(path="videos"):
             )
         )
     ipythondisplay.display(ipythondisplay.HTML(data="<br>".join(html)))
+
