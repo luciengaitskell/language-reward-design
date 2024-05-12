@@ -96,5 +96,7 @@ The only external library you can use is numpy, and if needed, the import must b
 This reward function should be dense; it should make the agent want to move closer to the specific subgoal. For example, you can use a distance function to achieve this for certain subgoals. You can also
 add reward components to ensure the prerequisites for the current subgoal are achieved if you think that would help.
 Have the maximum reward of the function be 1 (where the goal is obtained) and the minimum be 0. DO NOT use float('inf') or float('-inf') in your function.
+Although a reward of 1 should be given when the agent is at the goal, the agent should be rewarded for making progress towards the goal
+(such as moving closer to the door, key, or whatever is relevant to that subgoal).
 Note that the agent will at minimum be one step away from a door closed, because the agent must be adjacent to the door to toggle it open.
 The code should be the only thing you output, all in one python function without sub functions."""
